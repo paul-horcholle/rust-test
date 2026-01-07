@@ -1,6 +1,4 @@
-mod app;
-mod routes;
-mod state;
+use rust_test::app;
 
 #[tokio::main]
 async fn main() {
