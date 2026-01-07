@@ -1,19 +1,13 @@
-fn main() {
-    let article = src::NewsArticle {
-        headline: String::from("Rust reaches new heights"),
-        location: String::from("Internet"),
-        author: String::from("Jane Doe"),
-        content: String::from("Rust has become the most popular programming language in the world."),
-    };
+mod app;
+mod routes;
+mod state;
 
+#[tokio::main]
+async fn main() {
+    dotenvy::dotenv().ok();
 
-    let post = src::SocialPost {
-        username: String::from("rustacean"),
-        content: String::from("I love programming in Rust!"),
-        reply: false,
-        repost: false,
-    };
+    let app = app::build_app().await;
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
 
-    println!("Article Summary: {}", article.summarize());
-    println!("Post Summary: {}", post.summarize());
+    axum::serve(listener, app).await.unwrap();
 }
